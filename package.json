@@ -1,0 +1,29 @@
+{
+	"name": "w22-group-react-group-b",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.ts",
+	"type": "module",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "nodemon index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/revou-fsse-1/w22-group-react-group-b.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/revou-fsse-1/w22-group-react-group-b/issues"
+	},
+	"homepage": "https://github.com/revou-fsse-1/w22-group-react-group-b#readme",
+	"devDependencies": {
+		"@prisma/client": "^4.16.2",
+		"bcrypt": "^5.1.0",
+		"cors": "^2.8.5",
+		"express": "^4.18.2",
+		"jsonwebtoken": "^9.0.1",
+		"prisma": "^4.16.2"
+	}
+}
