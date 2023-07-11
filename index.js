@@ -63,6 +63,18 @@ app
 		} catch (err) {
 			res.status(401).json({ response: "Invalid Token" });
 		}
+	})
+	.delete(async (req, res) => {
+		try {
+			const token = String(req.headers["authorization"].split(" ")[1]);
+			const checkToken = customerGuard.checkTokenValid(token);
+			if (checkToken) {
+				const data = await customerService.deleteCustomer(+req.params.id);
+				res.status(data.code).json(data.message);
+			}
+		} catch (err) {
+			res.status(401).json({ response: "Invalid Token" });
+		}
 	});
 
 app.listen(port, () => {

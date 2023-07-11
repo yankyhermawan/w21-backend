@@ -105,4 +105,38 @@ export class CustomerService {
 			},
 		};
 	}
+
+	async deleteCustomer(id) {
+		const isExist = this.prismaService.customer.findUnique({
+			where: {
+				id: id,
+			},
+		});
+		if (isExist) {
+			const response = await this.prismaService.customer.delete({
+				where: {
+					id: id,
+				},
+			});
+			return {
+				code: 204,
+				message: {
+					response: response,
+				},
+			};
+		} else if (isExist === null) {
+			return {
+				code: 404,
+				message: {
+					response: "Customer Not Found",
+				},
+			};
+		}
+		return {
+			code: 500,
+			message: {
+				response: "Internal Server Error",
+			},
+		};
+	}
 }
