@@ -38,18 +38,32 @@ app
 		}
 	});
 
-app.route("/customer/:id").get(async (req, res) => {
-	try {
-		const token = String(req.headers["authorization"].split(" ")[1]);
-		const checkToken = customerGuard.checkTokenValid(token);
-		if (checkToken) {
-			const data = await customerService.getById(+req.params.id);
-			res.status(data.code).json(data.message);
+app
+	.route("/customer/:id")
+	.get(async (req, res) => {
+		try {
+			const token = String(req.headers["authorization"].split(" ")[1]);
+			const checkToken = customerGuard.checkTokenValid(token);
+			if (checkToken) {
+				const data = await customerService.getById(+req.params.id);
+				res.status(data.code).json(data.message);
+			}
+		} catch (err) {
+			res.status(401).json({ response: "Invalid Token" });
 		}
-	} catch (err) {
-		res.status(401).json({ response: "Invalid Token" });
-	}
-});
+	})
+	.patch(async (req, res) => {
+		try {
+			const token = String(req.headers["authorization"].split(" ")[1]);
+			const checkToken = customerGuard.checkTokenValid(token);
+			if (checkToken) {
+				const data = await customerService.patch(+req.params.id, req.body);
+				res.status(data.code).json(data.message);
+			}
+		} catch (err) {
+			res.status(401).json({ response: "Invalid Token" });
+		}
+	});
 
 app.listen(port, () => {
 	console.log(`Server Started on Port ${port}`);
