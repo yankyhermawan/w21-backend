@@ -5,9 +5,7 @@ Content-Type: application/json
 
 {
     "username": "budi",
-    "password": "budipassword",
-    "first_name": "budi",
-    "last_name": "man"
+    "password": "budipassword"
 }
 
 ### LOGIN
@@ -20,4 +18,38 @@ Content-Type: application/json
     "password": "budipassword"
 }
 
-### GET CUSTOMER
+### CREATE RECIPE
+POST http://localhost:4000/recipe
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJidWRpIiwiaWF0IjoxNjg5MTcyMjg5LCJleHAiOjE2ODkyNTg2ODl9.0z_hiVSE7XzU1LlQwippwk8no6tEqs6S3QNwM9GWGNI
+
+{
+    "name": "soto ayam",
+    "imageURL": "abcde",
+    "ingredients": ["soto", "nasi", "ayam"],
+    "step": ["masak", "makan"],
+    "userId": 1
+}
+
+### GET ALL
+GET http://localhost:4000/recipe
+
+### GET BY ID
+GET http://localhost:4000/recipe/2
+
+### GET BY NAME
+GET http://localhost:4000/recipe/soto
+
+
+### PATCH RECIPE
+PATCH http://localhost:4000/recipe/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJidWRpIiwiaWF0IjoxNjg5MTcyMjg5LCJleHAiOjE2ODkyNTg2ODl9.0z_hiVSE7XzU1LlQwippwk8no6tEqs6S3QNwM9GWGNI
+
+{
+    "name": "rawon1"
+}
+
+### DELETE RECIPE
+DELETE http://localhost:4000/recipe/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJidWRpIiwiaWF0IjoxNjg5MTcyMjg5LCJleHAiOjE2ODkyNTg2ODl9.0z_hiVSE7XzU1LlQwippwk8no6tEqs6S3QNwM9GWGNI

@@ -2,7 +2,7 @@
 	"name": "w22-group-react-group-b",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.ts",
+	"main": "index.js",
 	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
@@ -27,5 +27,8 @@
 		"express": "^4.18.2",
 		"jsonwebtoken": "^9.0.1",
 		"prisma": "^4.16.2"
+	},
+	"dependencies": {
+		"filestack-react": "^3.2.1"
 	}
 }

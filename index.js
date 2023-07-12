@@ -1,108 +1,139 @@
 import express from "express";
 import cors from "cors";
-import { CustomerGuard } from "./customer/customer.guard.js";
-import { CustomerService } from "./customer/customer.service.js";
 import { AuthService } from "./auth/auth.service.js";
-import cookieParser from "cookie-parser";
-
-const customerGuard = new CustomerGuard();
-const customerService = new CustomerService();
-const authService = new AuthService();
+import { RecipeGuard } from "./recipe/recipe.guard.js";
+import { RecipeService } from "./recipe/recipe.service.js";
+import { RecipeAuthorization } from "./recipe/recipe.authorization.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
+const authService = new AuthService();
+const recipeGuard = new RecipeGuard();
+const recipeService = new RecipeService();
+const recipeAuthorization = new RecipeAuthorization();
 
 app.use(express.json());
 app.use(cors());
-app.use(cookieParser());
 
-app.post("/auth/login", async (req, res) => {
-	try {
-		const { username, password } = req.body;
-		const response = await authService.login(username, password);
-		res.status(response.code).json(response.message);
-	} catch (err) {
-		res.status(400).json({ response: "Invalid Credentials" });
-	}
+// AUTH USER
+
+app.route("/auth/login").post(async (req, res) => {
+	const { username, password } = req.body;
+	const response = await authService.login(username, password);
+	res.status(response.code).json(response.message);
 });
 
-app.post("/auth/register", async (req, res) => {
-	try {
-		const response = await authService.register(req.body);
-		res.status(response.code).json(response.message);
-	} catch (err) {
-		res.status(400).json({ response: "Bad Request" });
-	}
+app.route("/auth/register").post(async (req, res) => {
+	const response = await authService.register(req.body);
+	res.status(response.code).json(response.message);
 });
 
-/// CUSTOMER ROUTE
+// RECIPE ROUTE
+
 app
-	.route("/customer")
+	.route("/recipe")
 	.get(async (req, res) => {
-		try {
-			const token = String(req.headers["authorization"].split(" ")[1]);
-			const checkToken = customerGuard.checkTokenValid(token);
-			if (checkToken) {
-				const data = await customerService.get();
-				res.status(data.code).json(data.message);
-			}
-		} catch (err) {
-			res.status(401).json({ response: "Invalid Token" });
-		}
+		const response = await recipeService.getAll();
+		res.status(response.code).json(response.message);
 	})
 	.post(async (req, res) => {
 		try {
-			const token = String(req.headers["authorization"].split(" ")[1]);
-			const checkToken = customerGuard.checkTokenValid(token);
+			const token = String(
+				req.headers["authorization"].split(" ")[1].replace("'", "")
+			);
+			const checkToken = recipeGuard.checkTokenValid(token);
 			if (checkToken) {
-				const data = await customerService.create(req.body);
-				res.status(data.code).json(data.message);
+				console.log(req.body);
+				const response = await recipeService.create(req.body, checkToken.id);
+				res.status(response.code).json(response.message);
 			}
+			res.status(400).json({
+				response: "Invalid Token",
+			});
 		} catch (err) {
-			res.status(401).json({ response: "Invalid Token" });
+			res.status(500).json({
+				response: "Server Error",
+			});
 		}
 	});
 
-/// CUSTOMER ROUTE WITH ID
+app.route("/recipe/:query").get(async (req, res) => {
+	const response = await recipeService.findByName(req.params.query);
+	res.status(response.code).json(response.message);
+});
+
 app
-	.route("/customer/:id")
+	.route("/recipe/:id")
 	.get(async (req, res) => {
-		try {
-			const token = String(req.headers["authorization"].split(" ")[1]);
-			const checkToken = customerGuard.checkTokenValid(token);
-			if (checkToken) {
-				const data = await customerService.getById(+req.params.id);
-				res.status(data.code).json(data.message);
-			}
-		} catch (err) {
-			res.status(401).json({ response: "Invalid Token" });
-		}
+		const response = await recipeService.findById(+req.params.id);
+		res.status(response.code).json(response.message);
 	})
 	.patch(async (req, res) => {
 		try {
-			const token = String(req.headers["authorization"].split(" ")[1]);
-			const checkToken = customerGuard.checkTokenValid(token);
+			const token = String(
+				req.headers["authorization"].split(" ")[1].replace("'", "")
+			);
+			const checkToken = recipeGuard.checkTokenValid(token);
 			if (checkToken) {
-				const data = await customerService.patch(+req.params.id, req.body);
-				res.status(data.code).json(data.message);
+				const checkAuthorization = recipeAuthorization.grantAccess(
+					+checkToken.id,
+					+req.params.id
+				);
+				if (checkAuthorization) {
+					const response = await recipeService.patchRecipe(
+						req.body,
+						checkToken.id
+					);
+					res.status(response.code).json(response.message);
+				} else {
+					console.log("c");
+					res.status(401).json({
+						message: "Access Denied",
+					});
+				}
+			} else if (!checkToken) {
+				res.status(400).json({
+					response: "Invalid Token",
+				});
 			}
 		} catch (err) {
-			res.status(401).json({ response: "Invalid Token" });
+			res.status(500).json({
+				response: "Server Error",
+			});
 		}
 	})
 	.delete(async (req, res) => {
 		try {
-			const token = String(req.headers["authorization"].split(" ")[1]);
-			const checkToken = customerGuard.checkTokenValid(token);
+			const token = String(
+				req.headers["authorization"].split(" ")[1].replace("'", "")
+			);
+			const checkToken = recipeGuard.checkTokenValid(token);
 			if (checkToken) {
-				const data = await customerService.deleteCustomer(+req.params.id);
-				res.status(data.code).json(data.message);
+				const checkAuthorization = recipeAuthorization.grantAccess(
+					+checkToken.id,
+					+req.params.id
+				);
+				if (checkAuthorization) {
+					const response = await recipeService.deleteRecipe(+req.params.id);
+					res.status(response.code).json(response.message);
+				} else {
+					console.log("c");
+					res.status(401).json({
+						message: "Access Denied",
+					});
+				}
+			} else if (!checkToken) {
+				res.status(400).json({
+					response: "Invalid Token",
+				});
 			}
 		} catch (err) {
-			res.status(401).json({ response: "Invalid Token" });
+			res.status(500).json({
+				response: "Server Error",
+			});
 		}
 	});
 
 app.listen(port, () => {
-	console.log(`Server Started on Port ${port}`);
+	console.log(`Server Running on port ${port}`);
 });

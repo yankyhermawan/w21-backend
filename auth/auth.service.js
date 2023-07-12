@@ -8,7 +8,7 @@ export class AuthService {
 	}
 
 	async login(username, password) {
-		const isExist = await this.prismaService.admin.findUnique({
+		const isExist = await this.prismaService.user.findUnique({
 			where: {
 				username: username,
 			},
@@ -43,7 +43,7 @@ export class AuthService {
 	}
 
 	async register(data) {
-		const isExist = await this.prismaService.admin.findUnique({
+		const isExist = await this.prismaService.user.findUnique({
 			where: {
 				username: data.username,
 			},
@@ -57,7 +57,7 @@ export class AuthService {
 			};
 		}
 		data.password = bcrypt.hashSync(data.password, 10);
-		const response = await this.prismaService.admin.create({
+		const response = await this.prismaService.user.create({
 			data: data,
 		});
 		response.password = undefined;
