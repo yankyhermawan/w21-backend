@@ -1,4 +1,4 @@
-import { PrismaService } from "../prisma.service";
+import { PrismaService } from "../prisma.service.js";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -31,7 +31,7 @@ export class AuthService {
 			};
 		}
 		isExist.password = undefined;
-		const token = jwt.sign(isExist, process.env["JWT_PRIVATE"], {
+		const token = jwt.sign(isExist, process.env["JWT_KEY"], {
 			expiresIn: "24h",
 		});
 		return {
@@ -56,7 +56,7 @@ export class AuthService {
 				},
 			};
 		}
-		data.password = bcrypt.hashSync(data.password, process.env["BCRYPT_SALT"]);
+		data.password = bcrypt.hashSync(data.password, 10);
 		const response = await this.prismaService.admin.create({
 			data: data,
 		});

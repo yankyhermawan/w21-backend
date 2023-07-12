@@ -3,6 +3,7 @@ import cors from "cors";
 import { CustomerGuard } from "./customer/customer.guard.js";
 import { CustomerService } from "./customer/customer.service.js";
 import { AuthService } from "./auth/auth.service.js";
+import cookieParser from "cookie-parser";
 
 const customerGuard = new CustomerGuard();
 const customerService = new CustomerService();
@@ -11,8 +12,9 @@ const authService = new AuthService();
 const app = express();
 const port = process.env.PORT || 4000;
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
 
 app.post("/auth/login", async (req, res) => {
 	try {
