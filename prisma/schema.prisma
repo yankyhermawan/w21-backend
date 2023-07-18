@@ -18,9 +18,17 @@ model Recipe {
   id          Int      @id @default(autoincrement())
   name        String
   imageURL    String
-  ingredients String[]
+  ingredients String
   step        String[]
   user        User?    @relation(fields: [userId], references: [id])
   userId      Int
   category    String
+}
+
+enum Category {
+  WESTERN
+  ASIAN
+  INDONESIAN
+  SWEETS
+  VEGETARIAN
 }
