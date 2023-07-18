@@ -66,15 +66,29 @@ app
 	});
 
 app.route("/recipe/:query").get(async (req, res) => {
-	const response = await recipeService.findByName(req.params.query);
-	res.status(response.code).json(response.message);
+	const token = String(
+		req.headers["authorization"].split(" ")[1].replace("'", "")
+	);
+	const checkToken = recipeGuard.checkTokenValid(token);
+	if (checkToken) {
+		const response = await recipeService.findByName(req.params.query);
+		res.status(response.code).json(response.message);
+	}
+	res.status(400).json({ response: "Invalid token" });
 });
 
 app
 	.route("/recipe/:id")
 	.get(async (req, res) => {
-		const response = await recipeService.findById(+req.params.id);
-		res.status(response.code).json(response.message);
+		const token = String(
+			req.headers["authorization"].split(" ")[1].replace("'", "")
+		);
+		const checkToken = recipeGuard.checkTokenValid(token);
+		if (checkToken) {
+			const response = await recipeService.findById(+req.params.id);
+			res.status(response.code).json(response.message);
+		}
+		res.status(400).json({ response: "Invalid token" });
 	})
 	.patch(async (req, res) => {
 		try {
