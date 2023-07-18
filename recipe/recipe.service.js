@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken";
-import * as bcrypt from "bcrypt";
 import { PrismaService } from "../prisma.service.js";
 
 export class RecipeService {

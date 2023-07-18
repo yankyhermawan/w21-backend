@@ -4,6 +4,7 @@ import { AuthService } from "./auth/auth.service.js";
 import { RecipeGuard } from "./recipe/recipe.guard.js";
 import { RecipeService } from "./recipe/recipe.service.js";
 import { RecipeAuthorization } from "./recipe/recipe.authorization.js";
+import multer from "multer";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -33,8 +34,15 @@ app.route("/auth/register").post(async (req, res) => {
 app
 	.route("/recipe")
 	.get(async (req, res) => {
-		const response = await recipeService.getAll();
-		res.status(response.code).json(response.message);
+		const token = String(
+			req.headers["authorization"].split(" ")[1].replace("'", "")
+		);
+		const checkToken = recipeGuard.checkTokenValid(token);
+		if (checkToken) {
+			const response = await recipeService.getAll();
+			res.status(response.code).json(response.message);
+		}
+		res.status(400).json({ response: "Invalid token" });
 	})
 	.post(async (req, res) => {
 		try {
