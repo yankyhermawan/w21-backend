@@ -11,14 +11,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/revou-fsse-1/w22-group-react-group-b.git"
+		"url": "git+https://github.com/yankyhermawan/w21-backend.git"
 	},
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/revou-fsse-1/w22-group-react-group-b/issues"
+		"url": "https://github.com/yankyhermawan/w21-backend/issues"
 	},
-	"homepage": "https://github.com/revou-fsse-1/w22-group-react-group-b#readme",
+	"homepage": "https://github.com/yankyhermawan/w21-backend#readme",
 	"devDependencies": {
 		"@prisma/client": "^4.16.2",
 		"bcrypt": "^5.1.0",
