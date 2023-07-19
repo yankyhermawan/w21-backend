@@ -156,6 +156,6 @@ app
 		}
 	});
 
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, () => {
 	console.log(`Server Running on port ${port}`);
 });
