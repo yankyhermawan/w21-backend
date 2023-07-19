@@ -34,15 +34,21 @@ app.route("/auth/register").post(async (req, res) => {
 app
 	.route("/recipe")
 	.get(async (req, res) => {
-		const token = String(
-			req.headers["authorization"].split(" ")[1].replace("'", "")
-		);
-		const checkToken = recipeGuard.checkTokenValid(token);
-		if (checkToken) {
-			const response = await recipeService.getAll();
-			res.status(response.code).json(response.message);
+		try {
+			const token = String(
+				req.headers["authorization"].split(" ")[1].replace("'", "")
+			);
+			const checkToken = recipeGuard.checkTokenValid(token);
+			if (checkToken) {
+				const response = await recipeService.getAll();
+				res.status(response.code).json(response.message);
+			}
+			res.status(400).json({ response: "Invalid token" });
+		} catch (err) {
+			res.status(500).json({
+				response: "Server Error",
+			});
 		}
-		res.status(400).json({ response: "Invalid token" });
 	})
 	.post(async (req, res) => {
 		try {
@@ -66,29 +72,41 @@ app
 	});
 
 app.route("/recipe/:query").get(async (req, res) => {
-	const token = String(
-		req.headers["authorization"].split(" ")[1].replace("'", "")
-	);
-	const checkToken = recipeGuard.checkTokenValid(token);
-	if (checkToken) {
-		const response = await recipeService.findByName(req.params.query);
-		res.status(response.code).json(response.message);
-	}
-	res.status(400).json({ response: "Invalid token" });
-});
-
-app
-	.route("/recipe/:id")
-	.get(async (req, res) => {
+	try {
 		const token = String(
 			req.headers["authorization"].split(" ")[1].replace("'", "")
 		);
 		const checkToken = recipeGuard.checkTokenValid(token);
 		if (checkToken) {
-			const response = await recipeService.findById(+req.params.id);
+			const response = await recipeService.findByName(req.params.query);
 			res.status(response.code).json(response.message);
 		}
 		res.status(400).json({ response: "Invalid token" });
+	} catch (err) {
+		res.status(500).json({
+			response: "Server Error",
+		});
+	}
+});
+
+app
+	.route("/recipe/:id")
+	.get(async (req, res) => {
+		try {
+			const token = String(
+				req.headers["authorization"].split(" ")[1].replace("'", "")
+			);
+			const checkToken = recipeGuard.checkTokenValid(token);
+			if (checkToken) {
+				const response = await recipeService.findById(+req.params.id);
+				res.status(response.code).json(response.message);
+			}
+			res.status(400).json({ response: "Invalid token" });
+		} catch (err) {
+			res.status(500).json({
+				response: "Server Error",
+			});
+		}
 	})
 	.patch(async (req, res) => {
 		try {
