@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  app:
+    image: group-project-image
+    container_name: backend-infra-basic-app
+    build: .
+    ports:
+      - 80:4000
+      - 443:4000
+      - 4000:4000
+    env_file:
+      - .env
+    restart: always
