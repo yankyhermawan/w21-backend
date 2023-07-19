@@ -6,8 +6,8 @@
 	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start:dev": "prisma generate && nodemon router.js",
-		"start:prod": "prisma migrate deploy && prisma generate && node router.js"
+		"start:dev": "prisma generate && nodemon index.js",
+		"start:prod": "prisma migrate deploy && prisma generate && node index.js"
 	},
 	"repository": {
 		"type": "git",
