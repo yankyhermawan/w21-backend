@@ -47,31 +47,6 @@ export class RecipeService {
 		}
 	}
 
-	async findByName(name) {
-		try {
-			const response = await this.prismaService.recipe.findMany({
-				where: {
-					name: {
-						contains: name,
-					},
-				},
-			});
-			return {
-				code: 200,
-				message: {
-					response: response,
-				},
-			};
-		} catch (err) {
-			return {
-				code: 500,
-				message: {
-					response: "Internal Server Error",
-				},
-			};
-		}
-	}
-
 	async create(data, id) {
 		try {
 			const dataToPost = {
@@ -110,6 +85,7 @@ export class RecipeService {
 			});
 			const updatedData = {
 				name: data.name || defaultData.name,
+				category: data.category || defaultData.category,
 				imageURL: data.imageURL || defaultData.imageURL,
 				ingredients: data.ingredients || defaultData.ingredients,
 				step: data.step || defaultData.step,
