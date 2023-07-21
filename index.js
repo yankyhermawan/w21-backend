@@ -58,7 +58,6 @@ app
 			);
 			const checkToken = recipeGuard.checkTokenValid(token);
 			if (checkToken) {
-				console.log(req.body);
 				const response = await recipeService.create(req.body, checkToken.id);
 				res.status(response.code).json(response.message);
 			} else {

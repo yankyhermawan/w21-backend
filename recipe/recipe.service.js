@@ -76,7 +76,8 @@ export class RecipeService {
 		try {
 			const dataToPost = {
 				name: data.name,
-				imageURL: data.imageURL,
+				category: data.category,
+				imageURL: data.url,
 				ingredients: data.ingredients,
 				step: data.step,
 				userId: id,
