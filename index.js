@@ -72,25 +72,6 @@ app
 		}
 	});
 
-app.route("/recipe/:query").get(async (req, res) => {
-	try {
-		const token = String(
-			req.headers["authorization"].split(" ")[1].replace("'", "")
-		);
-		const checkToken = recipeGuard.checkTokenValid(token);
-		if (checkToken) {
-			const response = await recipeService.findByName(req.params.query);
-			res.status(response.code).json(response.message);
-		} else {
-			res.status(400).json({ response: "Invalid token" });
-		}
-	} catch (err) {
-		res.status(500).json({
-			response: "Server Error",
-		});
-	}
-});
-
 app
 	.route("/recipe/:id")
 	.get(async (req, res) => {
