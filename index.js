@@ -42,8 +42,9 @@ app
 			if (checkToken) {
 				const response = await recipeService.getAll();
 				res.status(response.code).json(response.message);
+			} else {
+				res.status(400).json({ response: "Invalid token" });
 			}
-			res.status(400).json({ response: "Invalid token" });
 		} catch (err) {
 			res.status(500).json({
 				response: "Server Error",
@@ -60,10 +61,11 @@ app
 				console.log(req.body);
 				const response = await recipeService.create(req.body, checkToken.id);
 				res.status(response.code).json(response.message);
+			} else {
+				res.status(400).json({
+					response: "Invalid Token",
+				});
 			}
-			res.status(400).json({
-				response: "Invalid Token",
-			});
 		} catch (err) {
 			res.status(500).json({
 				response: "Server Error",
@@ -80,8 +82,9 @@ app.route("/recipe/:query").get(async (req, res) => {
 		if (checkToken) {
 			const response = await recipeService.findByName(req.params.query);
 			res.status(response.code).json(response.message);
+		} else {
+			res.status(400).json({ response: "Invalid token" });
 		}
-		res.status(400).json({ response: "Invalid token" });
 	} catch (err) {
 		res.status(500).json({
 			response: "Server Error",
@@ -100,8 +103,9 @@ app
 			if (checkToken) {
 				const response = await recipeService.findById(+req.params.id);
 				res.status(response.code).json(response.message);
+			} else {
+				res.status(400).json({ response: "Invalid token" });
 			}
-			res.status(400).json({ response: "Invalid token" });
 		} catch (err) {
 			res.status(500).json({
 				response: "Server Error",
@@ -126,7 +130,6 @@ app
 					);
 					res.status(response.code).json(response.message);
 				} else {
-					console.log("c");
 					res.status(401).json({
 						message: "Access Denied",
 					});
