@@ -37,6 +37,7 @@ export class AuthService {
 		return {
 			code: 200,
 			message: {
+				userID: isExist.id,
 				access_token: token,
 			},
 		};
