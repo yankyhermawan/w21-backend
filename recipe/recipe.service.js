@@ -80,9 +80,10 @@ export class RecipeService {
 		try {
 			const defaultData = await this.prismaService.recipe.findUnique({
 				where: {
-					id: id,
+					id: data.id,
 				},
 			});
+			console.log(defaultData);
 			const updatedData = {
 				name: data.name || defaultData.name,
 				category: data.category || defaultData.category,

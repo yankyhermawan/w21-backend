@@ -108,6 +108,7 @@ app
 						req.body,
 						checkToken.id
 					);
+					console.log("abc");
 					res.status(response.code).json(response.message);
 				} else {
 					res.status(401).json({
